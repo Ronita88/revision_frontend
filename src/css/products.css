@@ -1,0 +1,17 @@
+.bagContainer {
+  display: flex;
+  border: 1px solid Blue;
+  justify-content: center;
+  align-items: center;
+}
+
+.bag.container-left {
+  width: 500px;
+  border: orange 2 px solid;
+}
+
+.bag-container-right {
+  width: 500px;
+  margin-left: 10px;
+  border: red 1px solid;
+}
