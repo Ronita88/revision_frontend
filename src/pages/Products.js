@@ -31,6 +31,7 @@ function Products() {
   useEffect(() => {
     const fetchdata = async () => {
       try {
+        //route en get pour récupérer ma data
         const response = await axios.get(
           `http://localhost:4000/productslist?page=${currentPage}&limit=${limit}` //${page} correspond à req.query.page à qui on transmet page en props dans le tableau
         );
