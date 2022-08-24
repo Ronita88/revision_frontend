@@ -25,7 +25,7 @@ function Products() {
         setData(response.data);
         setIsloading(false);
 
-        const totalPages = Math.ceil(data.count / limit);
+        let totalPages = Math.ceil(data.count / limit);
         for (let i = 0; i < totalPages; i++) {
           pageNumber.push[i];
         }
