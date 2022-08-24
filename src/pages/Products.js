@@ -2,40 +2,79 @@
 
 // import package
 import { useEffect, useState } from "react";
+import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";
 import "../css/products.css";
 
 function Products() {
+  const [searchParams] = useSearchParams();
+  let currentPage = Number(searchParams.get("page"));
+  if (!currentPage) {
+    currentPage = 1;
+  }
+
   const [data, setData] = useState({});
   const [isLoading, setIsloading] = useState(true);
   // const [search, setSearch] = useState();
-  const [page, setPage] = useState(1);
+
   const [limit, setLimit] = useState(3);
-  const [totalPages, setTotalPages] = useState();
-  // const totalPages = Math.ceil(data.count / limit); //ici si je ne souhiate avoir que les boutons prev et next sans les chiffres de pagination
-  const pageNumber = [];
+  const [pagination, setPagination] = useState(null);
+
+  // const totalPages = Math.ceil(data.count / limit); //ici si je ne souhaite avoir que les boutons prev et next sans les chiffres de pagination
+
+  // console.log("totalPages >>>", totalPages);
+
+  // useEffect(() => {
+  //   setPage(currentPage);
+  // }, []);
 
   useEffect(() => {
     const fetchdata = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/productslist?page=${page}&limit=${limit}` //${page} correspond à req.query.page à qui on transmet page en props dans le tableau
+          `http://localhost:4000/productslist?page=${currentPage}&limit=${limit}` //${page} correspond à req.query.page à qui on transmet page en props dans le tableau
         );
-        console.log(response.data);
+        // console.log(response.data);
         setData(response.data);
-        setIsloading(false);
-
-        let totalPages = Math.ceil(data.count / limit);
-        for (let i = 0; i < totalPages; i++) {
-          pageNumber.push[i];
+        let totalPages = Math.ceil(response.data.count / limit);
+        const paginationArr = [
+          <div key={"prec"}>
+            <Link
+              to={`?page=${currentPage - 1}`}
+              className={currentPage === 1 ? "disabled-link" : ""}
+            >
+              prec
+            </Link>
+          </div>,
+        ];
+        console.log("totalPage >>>", totalPages);
+        for (let i = 1; i <= totalPages; i++) {
+          paginationArr.push(
+            <div key={i}>
+              <Link to={`?page=${i}`}>{i}</Link>
+            </div>
+          );
         }
-        console.log(pageNumber);
+        paginationArr.push(
+          <div key={"suiv"}>
+            <Link
+              to={`?page=${currentPage + 1}`}
+              className={currentPage < totalPages ? "" : "disabled-link"}
+            >
+              suiv
+            </Link>
+          </div>
+        );
+        setPagination(paginationArr);
+
+        setIsloading(false);
+        console.log("paginationArr >>>", paginationArr);
       } catch (error) {
         console.log(error.response); // contrairement au error.message d'express
       }
     };
     fetchdata();
-  }, [page, limit]);
+  }, [searchParams, limit]);
 
   return isLoading ? (
     <p>En cours de chargement...</p>
@@ -56,19 +95,7 @@ function Products() {
           </div>
         );
       })}
-      {/* pour désactiver le boutton  disabled={page !== 0} et disabled={page <=data.count} ne marchent pas*/}
-      <button
-        onClick={() => setPage(page - 1)}
-        disabled={page === 1 ? true : false}
-      >
-        prev
-      </button>
-      <button
-        onClick={() => setPage(page + 1)}
-        disabled={page === totalPages ? true : false}
-      >
-        next
-      </button>
+      <div className="pagination">{pagination}</div>
     </div>
   );
 }

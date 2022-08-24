@@ -15,3 +15,13 @@
   margin-left: 10px;
   border: red 1px solid;
 }
+.disabled-link {
+  pointer-events: none;
+  color: red;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  width: 500px;
+}
