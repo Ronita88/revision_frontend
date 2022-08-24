@@ -10,7 +10,9 @@ function Products() {
   const [isLoading, setIsloading] = useState(true);
   // const [search, setSearch] = useState();
   const [page, setPage] = useState(1);
-  const { limit, setLimit } = useState(0);
+  const [limit, setLimit] = useState(3); // en a-t'on vraiment besoin
+  const totalPages = Math.ceil(data.count / productForEachPage);
+  const productForEachPage = data.limit;
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -22,7 +24,7 @@ function Products() {
         setData(response.data);
         setIsloading(false);
       } catch (error) {
-        console.log(error.message); // contrairement au error.message d'express
+        console.log(error.response); // contrairement au error.message d'express
       }
     };
     fetchdata();
@@ -33,7 +35,7 @@ function Products() {
   ) : (
     <div>
       <h1>Nos sacs</h1>
-      {data.map((bag, index) => {
+      {data.products.map((bag, index) => {
         return (
           <div className="bagContainer" key={index}>
             <div className="bag-container-left">
@@ -47,7 +49,14 @@ function Products() {
           </div>
         );
       })}
-      <input type />
+      {/* pour désactiver le boutton  disabled={page !== 0} et disabled={page <=data.count} ne marchent pas*/}
+      <button
+        onClick={() => setPage(page - 1)}
+        disabled={page === 1 ? true : false}
+      >
+        prev
+      </button>
+      <button onClick={() => setPage(page + 1)}>next</button>
     </div>
   );
 }
