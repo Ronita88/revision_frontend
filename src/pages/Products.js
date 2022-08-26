@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";
 import "../css/products.css";
+import Header from "../components/Header";
 
 function Products() {
   const [searchParams] = useSearchParams();
@@ -13,7 +14,7 @@ function Products() {
     currentPage = 1;
   }
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState({}); //parce qu'on reçoit un objet qui contient la clé count qui renvoit un nombre et un tableau d'objet
   const [isLoading, setIsloading] = useState(true);
   // const [search, setSearch] = useState();
 
@@ -81,6 +82,7 @@ function Products() {
     <p>En cours de chargement...</p>
   ) : (
     <div>
+      <Header />
       <h1>Nos sacs</h1>
       {data.products.map((bag, index) => {
         return (
